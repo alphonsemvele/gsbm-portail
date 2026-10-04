@@ -1,0 +1,369 @@
+models:
+  Region:
+    id: id
+    name: string
+    timestamps: timestamps
+    relationships:
+      hasMany: Department
+
+  Department:
+    id: id
+    name: string
+    region_id: id foreign:regions
+    timestamps: timestamps
+    relationships:
+      belongsTo: Region
+      hasMany: Arrondissement
+
+  Arrondissement:
+    id: id
+    name: string
+    department_id: id foreign:departments
+    timestamps: timestamps
+    relationships:
+      belongsTo: Department
+
+  Section:
+    id: id
+    name: string:500
+    abbreviation: string
+    code: string
+    status: enum:pending,Success,failed
+    timestamps: timestamps
+    relationships:
+      hasMany: Cycle, Cours, Ue, Salle
+
+  Cycle:
+    id: id
+    name: string
+    section_id: id
+    file: string nullable
+    status: enum:pending,Success,failed default:pending
+    timestamps: timestamps
+    relationships:
+      belongsTo: Section
+      hasMany: Cours, Examen, Salle, ConfigurationSection
+
+  Configuration:
+    id: id
+    name: string
+    code: string
+    status: enum:pending,Success,failed
+    timestamps: timestamps
+    relationships:
+      hasMany: ConfigurationSection
+
+  ConfigurationSection:
+    id: id
+    section_id: id
+    configuration_id: id
+    level: integer
+    status: enum:pending,Success,failed
+    timestamps: timestamps
+    relationships:
+      belongsTo: Section, Configuration
+
+  Filiere:
+    id: id
+    name: string
+    cycle_id: id foreign:cycles nullable
+    institution: enum:ISM,IFPM
+    status: enum:pending,Success,failed default:pending
+    timestamps: timestamps
+    relationships:
+      belongsTo: Cycle
+      hasMany: Specialite
+
+  Specialite:
+    id: id
+    name: string
+    filiere_id: id foreign:filieres
+    price: integer default:0
+    status: enum:pending,Success,failed default:pending
+    timestamps: timestamps
+    relationships:
+      belongsTo: Filiere
+
+  Ue:
+    id: id
+    name: string
+    code: string
+    section_id: id nullable
+    cycle_id: id nullable
+    status: enum:pending,Success,failed
+    timestamps: timestamps
+    relationships:
+      belongsTo: Section, Cycle
+      hasMany: Cours
+
+  Cours:
+    id: id
+    name: longtext nullable
+    code: string
+    section_id: id
+    cycle_id: id nullable
+    ue_id: id
+    responsable_id: id
+    start: timestamp
+    end: timestamp nullable
+    credit: integer
+    hour_number: integer nullable
+    status: enum:pending,Success,failed
+    timestamps: timestamps
+    relationships:
+      belongsTo: Section, Cycle, Ue, User
+      hasMany: Examen
+
+  Salle:
+    id: id
+    name: string
+    capacite: integer
+    section_id: id
+    cycle_id: id
+    status: enum:pending,Success,failed
+    timestamps: timestamps
+    relationships:
+      belongsTo: Section, Cycle
+      hasMany: Examen
+
+  Examen:
+    id: id
+    cours_id: id
+    section_id: id
+    cycle_id: id nullable
+    salle_id: id
+    date: date
+    heure: time
+    status: enum:pending,Success,failed
+    timestamps: timestamps
+    relationships:
+      belongsTo: Cours, Section, Cycle, Salle
+
+  User:
+    id: id
+    name: string
+    lastname: string nullable
+    email: string nullable unique
+    email_verified_at: timestamp nullable
+    password: string
+    matricule: string nullable
+    contact: string
+    whatsapp: string nullable
+    role: enum:directeur,student,secretaire,econome,enseignant,concierge,bibliothecaire,admin
+    formation_type: string nullable
+    filiere_id: id nullable
+    specialite_id: id nullable
+    cycle_id: id nullable
+    section_id: id nullable
+    region_id: id nullable
+    department_id: id nullable
+    arrondissement_id: id nullable
+    image: string nullable
+    father_name: string nullable
+    father_contact: string nullable
+    mother_name: string nullable
+    mother_contact: string nullable
+    status: enum:pending,Success,failed
+    remember_token: string:100 nullable
+    timestamps: timestamps
+    relationships:
+      belongsTo: Filiere, Specialite, Cycle, Section, Region, Department, Arrondissement
+      hasMany: Cours, BookUser, Commande, Support
+
+  Preinscription:
+    id: id
+    formation_name: string:20
+    cycle_id: id nullable
+    filiere_id: id
+    specialite_id: id
+    name: string
+    last_name: string
+    birth: date
+    region_id: id
+    departement_id: id
+    arrondissement_id: id
+    contact: string
+    email: string nullable
+    whatsapp_number: string nullable
+    father: string
+    mother: string
+    parrain_name: string nullable
+    parrain_contact: string nullable
+    birth_certificate: longtext nullable
+    diploma: longtext nullable
+    ref: string
+    price: integer default:0
+    status: enum:pending,Success,failed
+    payment_status: enum:pending,Success,failed
+    isValidated: boolean default:false
+    timestamps: timestamps
+
+  Annonce:
+    id: id
+    title: longtext
+    content: longtext
+    file: string nullable
+    date: date
+    public: enum:all,student,personnel
+    status: enum:pending,Success,failed
+    timestamps: timestamps
+
+  Book:
+    id: id
+    name: longtext
+    auteur: longtext
+    code: string
+    price: integer
+    status: enum:pending,Success,failed,emprunt
+    timestamps: timestamps
+    relationships:
+      hasMany: BookUser
+
+  BookUser:
+    id: id
+    user_id: id
+    book_id: id
+    return_date: date
+    status: enum:pending,Success,failed
+    timestamps: timestamps
+    relationships:
+      belongsTo: User, Book
+
+  Menu:
+    id: id
+    name: longtext
+    type: enum:dessert,repas,complement
+    categorie: enum:dejeuner,diner,souper
+    price: integer
+    status: enum:pending,Success,failed
+    timestamps: timestamps
+    relationships:
+      hasMany: MenuDay
+
+  MenuDay:
+    id: id
+    menu_id: id
+    day: string nullable
+    hours: time nullable
+    type: enum:one,allDay
+    specialday: datetime nullable
+    status: enum:pending,Success,failed
+    timestamps: timestamps
+    relationships:
+      belongsTo: Menu
+      hasMany: Commande
+
+  Commande:
+    id: id
+    menuDay_id: id
+    user_id: id
+    hours: time
+    code: string
+    status: enum:pending,Success,failed
+    timestamps: timestamps
+    relationships:
+      belongsTo: MenuDay, User
+
+  Support:
+    id: id
+    subject: longtext
+    description: longtext
+    user_id: id
+    code: string
+    status: enum:pending,Success,failed
+    timestamps: timestamps
+    relationships:
+      belongsTo: User
+
+  Notification:
+    id: id
+    name: longtext
+    email: string nullable
+    whatsapp: string nullable
+    phone: string nullable
+    status: enum:pending,Success,failed
+    created_at: timestamp
+    updated_at: timestamp nullable
+
+controllers:
+  Region:
+    index:
+      query: all
+      render: regions.index with:regions
+
+    store:
+      validate: name
+      save: region
+      redirect: regions.index
+
+  Department:
+    index:
+      query: all
+      render: departments.index with:departments
+
+    store:
+      validate: name, region_id
+      save: department
+      redirect: departments.index
+
+  Section:
+    index:
+      query: all
+      render: sections.index with:sections
+
+    store:
+      validate: name, abbreviation, code, status
+      save: section
+      redirect: sections.index
+
+  Cycle:
+    index:
+      query: all
+      render: cycles.index with:cycles
+
+    store:
+      validate: name, section_id, status
+      save: cycle
+      redirect: cycles.index
+
+  User:
+    index:
+      query: all
+      render: users.index with:users
+
+    store:
+      validate: name, email, password, role, contact
+      save: user
+      redirect: users.index
+
+  Cours:
+    index:
+      query: all
+      render: cours.index with:cours
+
+    store:
+      validate: name, section_id, ue_id, responsable_id, start, credit, status
+      save: cours
+      redirect: cours.index
+
+  Book:
+    index:
+      query: all
+      render: books.index with:books
+
+    store:
+      validate: name, auteur, code, price, status
+      save: book
+      redirect: books.index
+
+  Annonce:
+    index:
+      query: all
+      render: annonces.index with:annonces
+
+    store:
+      validate: title, content, date, public, status
+      save: annonce
+      redirect: annonces.index
+
+seeders: Region, Department, Arrondissement
