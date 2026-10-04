@@ -42,3 +42,27 @@ MAIL_PASSWORD=
 MAIL_ENCRYPTION=tls
 MAIL_FROM_ADDRESS="info@lamajestueuse.com"
 MAIL_FROM_NAME="GSBM"
+
+# Identite de l'etablissement. Le code est commun a IUM, IFPM et GSBM :
+# sans ces valeurs, le site s'affiche sous celle d'IUM, qui est la valeur
+# par defaut du code.
+ETABLISSEMENT_SIGLE="GSBM NDAZOA"
+ETABLISSEMENT_NOM="Groupe Scolaire Bilingue La Majestueuse"
+ETABLISSEMENT_SLOGAN="Un avenir brillant commence ici."
+ETABLISSEMENT_ADRESSE="Mbankomo, Ndazoa — Yaoundé, Cameroun"
+ETABLISSEMENT_TELEPHONE="+237 699 123 456"
+ETABLISSEMENT_EMAIL=info@gsbm-ndazoa.com
+ETABLISSEMENT_DOMAINE=gsbm-ndazoa.com
+ETABLISSEMENT_LOGO=images/logo.png
+LIBELLE_CYCLE="Cycles"
+LIBELLE_CYCLE_AIDE="Maternelle, Primaire"
+LIBELLE_DEPARTEMENT="Sections"
+LIBELLE_DEPARTEMENT_AIDE="Francophone, anglophone"
+LIBELLE_FILIERE="Niveaux"
+LIBELLE_FILIERE_AIDE="Cycles par section"
+LIBELLE_SPECIALITE="Classes"
+LIBELLE_SPECIALITE_AIDE="PS à CM2, Nursery à Class 6"
+LIBELLE_UE="Domaines"
+LIBELLE_UE_AIDE="Domaines d apprentissage"
+LIBELLE_ETUDIANTS="Élèves"
+ETABLISSEMENT_MODULE_INSCRIPTIONS=true
