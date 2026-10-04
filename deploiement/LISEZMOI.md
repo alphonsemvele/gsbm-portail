@@ -18,8 +18,8 @@ Composer ne tourne jamais sur le serveur : `vendor/` arrive tout construit.
 | `SSH_HOST` | oui | l'hôte SSH de PlanetHoster |
 | `SSH_USER` | oui | l'utilisateur SSH du compte |
 | `SSH_KEY` | oui | la **clé privée** de déploiement, en entier |
-| `APP_PATH` | oui | où vit l'application, **hors** de toute racine web — par exemple `/home/<utilisateur>/apps/gsbm` |
-| `RACINE_WEB` | recommandé | la racine du sous-domaine, `/home/<utilisateur>/gsbm` : elle devient un lien vers `public/` |
+| `APP_PATH` | oui | où vit l'application, **hors** de toute racine web — par exemple `/home/lamajes/apps/gsbm` |
+| `RACINE_WEB` | recommandé | la racine du sous-domaine, `/home/lamajes/gsbm` : elle devient un lien vers `public/` |
 | `SSH_PORT` | non | si différent de 22 |
 | `PHP_BIN` | non | chemin complet du PHP du serveur, si `php` n'est pas le bon |
 
@@ -44,6 +44,21 @@ cat ~/.ssh/deploiement-gsbm       # à coller dans le secret SSH_KEY
 ```
 
 ### 3. La base et le fichier .env
+
+Tout se fait en une fois, depuis votre poste :
+
+```bash
+ssh lamajes@node42.n0c.com "mkdir -p ~/apps/gsbm"
+scp deploiement/env-production.exemple lamajes@node42.n0c.com:~/apps/gsbm/.env
+ssh lamajes@node42.n0c.com "nano ~/apps/gsbm/.env"   # DB_DATABASE, DB_USERNAME, DB_PASSWORD
+ssh lamajes@node42.n0c.com "cd ~/apps/gsbm && php artisan key:generate"
+```
+
+La base elle-meme se cree depuis le panneau PlanetHoster (MySQL), avant
+cette etape. Le `.env` reste sur le serveur : le pipeline ne l'envoie ni ne
+l'ecrase.
+
+### 3 bis. En detail
 
 Créez la base depuis le panneau PlanetHoster, puis, sur le serveur :
 
