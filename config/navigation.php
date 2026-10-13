@@ -38,6 +38,14 @@ return [
             ['titre' => 'Support', 'lien' => '/admin/support', 'icone' => 'support'],
         ]],
 
+        /*
+         * Le personnel vient du portail La Majestueuse : cet ecran le montre
+         * et va chercher la liste, il ne cree ni ne paie personne.
+         */
+        ['groupe' => 'Utilisateurs', 'liens' => [
+            ['titre' => 'Personnel', 'lien' => '/admin/personnel', 'icone' => 'personnel'],
+        ]],
+
         ['groupe' => 'Communication', 'liens' => [
             ['titre' => 'Annonces', 'lien' => '/admin/annonce', 'icone' => 'annonce'],
             ['titre' => 'Articles', 'lien' => '/admin/article', 'icone' => 'document'],
